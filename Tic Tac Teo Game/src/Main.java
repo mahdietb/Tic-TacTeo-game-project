@@ -5,64 +5,68 @@ public class Main {
     static ArrayList<Integer> arraylist;
     static ArrayList<Integer> randomList;
     static Random rand;
+
     public static void main(String[] args) {
 
-        get=new Scanner(System.in);
-        rand=new Random();
+        get = new Scanner(System.in);
+        rand = new Random();
 
-        int n= 16;
-        arraylist = new ArrayList<>(n);
-        for (int i = 0; i < 16; i++) {
-            arraylist.add(i);
-        }
-        Collections.shuffle(arraylist);
 
+        computerMovesList();
 
         staterMenu();
 
 
     }
 
-
-
-
-
-
-
+    /**
+     * This Method
+     */
+    public static void computerMovesList() {
+        int n = 16;
+        arraylist = new ArrayList<>(n);
+        for (int i = 0; i < 16; i++) {
+            arraylist.add(i);
+        }
+        Collections.shuffle(arraylist);
+    }
 
     /**
-     * This Methode get cell numbers and put right character in a place
+     * This Method get cell numbers and put right character in a place
      * ,also it checks the limitation of number we can choose
-     * @param firstPlayer first player character
+     *
+     * @param firstPlayer  first player character
      * @param secondPlayer second player character
-     * @param move each move in game
-     * @param matrix game board matrix
-     * @param array to save the movement
+     * @param move         each move in game
+     * @param matrix       game board matrix
+     * @param array        to save the movement
      */
 
-    public static void printBoardForPlayer(String firstPlayer, String secondPlayer, int move, String[][] matrix, int[] array){
+    public static void printBoardForPlayer(String firstPlayer, String secondPlayer, int move, String[][] matrix, int[] array) {
 
 
-        int length=3;
-        int flag=0;
+        int length = 3;
+        int flag = 0;
 
-        while(flag==0) {
-            if((move>=0)&&(move<16)){
+        while (flag == 0) {
+            if ((move >= 0) && (move < 16)) {
                 for (int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
 
-                        if ((move == ((4 * i) + j)) && (!Objects.equals(matrix[i][j], "#")) && (!Objects.equals(matrix[i][j], secondPlayer))&&(!Objects.equals(matrix[i][j], firstPlayer))) {
+                        if ((move == ((4 * i) + j)) && (!Objects.equals(matrix[i][j], "#")) && (!Objects.equals(matrix[i][j], secondPlayer)) && (!Objects.equals(matrix[i][j], firstPlayer))) {
                             matrix[i][j] = firstPlayer;//
                             array[length] = move;
                             flag = 1;
-                        }else if((move == ((4 * i) + j))&&((Objects.equals(matrix[i][j], secondPlayer))||(Objects.equals(matrix[i][j], "#"))||(Objects.equals(matrix[i][j], firstPlayer)))){
+                        } else if ((move == ((4 * i) + j)) && ((Objects.equals(matrix[i][j], secondPlayer)) || (Objects.equals(matrix[i][j], "#")) || (Objects.equals(matrix[i][j], firstPlayer)))) {
                             System.out.print("please try another number this one is already taken =");
-                            move= get.nextInt();
+                            move = get.nextInt();
                         }
 
-                    }}}else{
+                    }
+                }
+            } else {
                 System.out.print("your number is not valid try another one =");
-                move= get.nextInt();
+                move = get.nextInt();
             }
 
             springboard(matrix);
@@ -70,102 +74,93 @@ public class Main {
     }
 
 
-
-
-
-
-
     /**
      * This Methode checks the possibility of wining for every player
+     *
      * @param player character of each player "X" or "O"
-     * @param Matrix game board matrix
-     * @param move every movement of each player
+     * @param matrix game board matrix
+     * @param move   every movement of each player
      * @return flag to stop the while loop if one of the player wins
      */
 
-    static int check(String player,String[][] Matrix,int move) {
-        int flag=0;
+    static int check(String player, String[][] matrix, int move) {
+        int flag = 0;
         int index;
-        int column=0;
+        int column = 0;
         int row = 0;
-        int countForRow =0;
-        int countForColumn=0;
-        int sumForColumn=0;
-        int sumForRow=0;
+        int countForRow = 0;
+        int countForColumn = 0;
+        int sumForColumn = 0;
+        int sumForRow = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
 
-                if(move==((4*i)+j)){
-                    row=i;
-                    column=j;
+                if (move == ((4 * i) + j)) {
+                    row = i;
+                    column = j;
 
 
-                }}}
+                }
+            }
+        }
 
         for (int k = 0; k < 4; k++) {
-            if(Objects.equals(Matrix[row][k], player)){
-                index=(4*row)+k;
-                sumForRow+= index;
+            if (Objects.equals(matrix[row][k], player)) {
+                index = (4 * row) + k;
+                sumForRow += index;
                 countForRow++;
 
             }
         }
-        if((countForRow == 3) && ((sumForRow % 3) == 0)){
-            flag=1;
-            System.out.println(player+"wins");
-        }
-        else if (countForRow==4){
-            flag=1;
-            System.out.println(player+"wins");
-        }
-        else{ for (int h = 0; h < 4; h++) {
-            if(Objects.equals(Matrix[h][column], player)){
-                index = (4 * h) + column;
-                sumForColumn += index;
-                countForColumn++;
-            }}
-
-            if((countForColumn == 3) && ((sumForColumn % 3) == 0)){
-                flag = 1;
-                System.out.println(player+" wins");
-            } else if(countForColumn == 4){
-
-                flag = 1;
-                System.out.println(player+"wins");
+        if ((countForRow == 3) && ((sumForRow % 3) == 0)) {
+            flag = 1;
+            System.out.println(player + "wins");
+        } else if (countForRow == 4) {
+            flag = 1;
+            System.out.println(player + "wins");
+        } else {
+            for (int h = 0; h < 4; h++) {
+                if (Objects.equals(matrix[h][column], player)) {
+                    index = (4 * h) + column;
+                    sumForColumn += index;
+                    countForColumn++;
+                }
             }
-            else{
-                if((Objects.equals(Matrix[0][0], player))&&(Objects.equals(Matrix[1][1], player))&&(Objects.equals(Matrix[2][2], player))){
-                    flag = 1;
-                    System.out.println(player+" wins");
 
-                } else if ((Objects.equals(Matrix[1][1], player))&&(Objects.equals(Matrix[2][2], player))&&(Objects.equals(Matrix[3][3], player))) {
-                    flag = 1;
-                    System.out.println(player+" wins");
-                }
-                else if ((Objects.equals(Matrix[0][3], player))&&(Objects.equals(Matrix[1][2], player))&&(Objects.equals(Matrix[2][1], player))) {
-                    flag = 1;
-                    System.out.println(player+" wins");
-                }
-                else if ((Objects.equals(Matrix[1][2], player))&&(Objects.equals(Matrix[2][1], player))&&(Objects.equals(Matrix[3][0], player))) {
-                    flag = 1;
-                    System.out.println(player+" wins");
-                }
-                else if ((Objects.equals(Matrix[1][3], player))&&(Objects.equals(Matrix[2][2], player))&&(Objects.equals(Matrix[3][1], player))) {
-                    flag = 1;
-                    System.out.println(player+" wins");
-                }
-                else if ((Objects.equals(Matrix[0][2], player))&&(Objects.equals(Matrix[1][1], player))&&(Objects.equals(Matrix[2][0], player))) {
+            if ((countForColumn == 3) && ((sumForColumn % 3) == 0)) {
+                flag = 1;
+                System.out.println(player + " wins");
+            } else if (countForColumn == 4) {
 
-                    flag=1;
-                    System.out.println(player+" wins");
-                }
-                else if ((Objects.equals(Matrix[0][1], player))&&(Objects.equals(Matrix[1][2], player))&&(Objects.equals(Matrix[2][3], player))) {
-                    flag =1;
-                    System.out.println(player+" wins");
-                }
-                else if((Objects.equals(Matrix[1][0], player))&&(Objects.equals(Matrix[2][1], player))&&(Objects.equals(Matrix[3][2], player))) {
-                    flag=1;
-                    System.out.println(player+" wins");
+                flag = 1;
+                System.out.println(player + "wins");
+            } else {
+                if ((Objects.equals(matrix[0][0], player)) && (Objects.equals(matrix[1][1], player)) && (Objects.equals(matrix[2][2], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+
+                } else if ((Objects.equals(matrix[1][1], player)) && (Objects.equals(matrix[2][2], player)) && (Objects.equals(matrix[3][3], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[0][3], player)) && (Objects.equals(matrix[1][2], player)) && (Objects.equals(matrix[2][1], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[1][2], player)) && (Objects.equals(matrix[2][1], player)) && (Objects.equals(matrix[3][0], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[1][3], player)) && (Objects.equals(matrix[2][2], player)) && (Objects.equals(matrix[3][1], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[0][2], player)) && (Objects.equals(matrix[1][1], player)) && (Objects.equals(matrix[2][0], player))) {
+
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[0][1], player)) && (Objects.equals(matrix[1][2], player)) && (Objects.equals(matrix[2][3], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
+                } else if ((Objects.equals(matrix[1][0], player)) && (Objects.equals(matrix[2][1], player)) && (Objects.equals(matrix[3][2], player))) {
+                    flag = 1;
+                    System.out.println(player + " wins");
                 }
             }
         }
@@ -173,91 +168,83 @@ public class Main {
     }
 
 
-
-
-
     /**
      * print game board after blocking three cells
-     * @param matrix1 matrix of game board
+     *
+     * @param matrixBoard matrix of game board
      */
-    public static void printBoard(String[][]matrix1){
-        int[]array;
-        array= giveRandomMove();
-        for (int i = 0 ; i < 4 ; i++) {
-            for (int j = 0 ; j < 4 ; j++) {
+    public static void printBoard(String[][] matrixBoard) {
+        int[] array;
+        array = giveRandomMove();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 int y = (4 * i) + j;
 
-                if(y == array[0] || y == array[1] || y == array[2]){
-                    matrix1[i][j] = "#";
+                if (y == array[0] || y == array[1] || y == array[2]) {
+                    matrixBoard[i][j] = "#";
                 } else {
                     String s = String.valueOf(y);
-                    matrix1[i][j] = s;}
+                    matrixBoard[i][j] = s;
+                }
             }
         }
 
-        springboard(matrix1);
+        springboard(matrixBoard);
     }
 
 
-
-
-
-
-
-
     /**
-     * This methode is for printing movements of computer
-     * @param matrix2 matrix of game
-     * @param move computer`s every move in arraylist
+     * This Method is for printing movements of computer
+     *
+     * @param matrixBoard matrix of game
+     * @param move        computer`s every move in arraylist
      * @return the move that computer made
      */
 
-    public static int printForComputer(String[][] matrix2, int move){
+    public static int printForComputer(String[][] matrixBoard, int move) {
         System.out.println("it is computer`s turn =");
 
-        int flag=0;
+        int flag = 0;
 
-        while(flag==0){
-            move= arraylist.get(0);
+        while (flag == 0) {
+            move = arraylist.get(0);
 
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    if((move == (4 * i) + j) && (!Objects.equals(matrix2[i][j], "#") && !Objects.equals(matrix2[i][j], "X") && !Objects.equals(matrix2[i][j], "O"))){
+                    if ((move == (4 * i) + j) && (!Objects.equals(matrixBoard[i][j], "#") && !Objects.equals(matrixBoard[i][j], "X") && !Objects.equals(matrixBoard[i][j], "O"))) {
 
-                        matrix2[i][j] = "O";
+                        matrixBoard[i][j] = "O";
                         arraylist.remove(0);
-                        flag=1;
-                    }else if((move == ( (4 * i )+ j) ) && (Objects.equals(matrix2[i][j], "#")||Objects.equals(matrix2[i][j], "X")|| Objects.equals(matrix2[i][j], "O"))){
+                        flag = 1;
+                    } else if ((move == ((4 * i) + j)) && (Objects.equals(matrixBoard[i][j], "#") || Objects.equals(matrixBoard[i][j], "X") || Objects.equals(matrixBoard[i][j], "O"))) {
 
                         arraylist.remove(0);
 
                     }
                 }
-            }}
-        springboard(matrix2);
+            }
+        }
+        springboard(matrixBoard);
         return move;
     }
 
 
-
-
-
-
     /**
-     * THis Methode get an arraylist and shuffle it that we can have an array of messed up numbers
+     * THis Method get an arraylist and shuffle it that we can have an array of messed up numbers
      * ,so we can access to un duplicated random numbers for blocks
-     * @return  array of messed up numbers
+     *
+     * @return array of messed up numbers
      */
-    public static int[] giveRandomMove(){
-        int[]array=new int[16];
-        int n=16;
+    public static int[] giveRandomMove() {
+        int[] array = new int[16];
+        int n = 16;
         randomList = new ArrayList<>(n);
         for (int i = 0; i < 16; i++) {
             randomList.add(i);
         }
         Collections.shuffle(randomList);
-        for (int i = 0; i <16 ; i++) {
-            array[i]= randomList.get(i);
+        for (int i = 0; i < 16; i++) {
+            array[i] = randomList.get(i);
         }
 
         return array;
@@ -265,21 +252,18 @@ public class Main {
     }
 
 
-
-
-
     /**
-     * @param matrix
-     * This methode get matrix and print if for the first time
+     * @param matrix This Method get matrix and print if for the first time
      */
-    public static void springboard(String [][]matrix){
+    public static void springboard(String[][] matrix) {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
 
-                System.out.printf("| %-2s ",matrix[i][j]);
-            }    System.out.println();
-            if( i < 3){
+                System.out.printf("| %-2s ", matrix[i][j]);
+            }
+            System.out.println();
+            if (i < 3) {
                 System.out.println("------------------");
             }
         }
@@ -287,18 +271,13 @@ public class Main {
     }
 
 
-
-
-
-
-    public static void staterMenu()
-    {
+    public static void staterMenu() {
 
         int x = 0;
 
         System.out.println();
 
-        while(x!=3) {
+        while (x != 3) {
             System.out.println();
             System.out.println("welcome to Tic-Tac-Teo game");
 
@@ -310,13 +289,13 @@ public class Main {
             System.out.println("3)Exit");
             System.out.print("your choice =");
             x = get.nextInt();
-            switch (x){
+            switch (x) {
                 case 1:
-                    choice1();
+                    chooseHuman();
                     break;
-                case  2:
+                case 2:
 
-                    choice2();
+                    chooseComputer();
                     break;
 
                 case 3:
@@ -329,32 +308,26 @@ public class Main {
     }
 
 
-
-
-
-
-
     /**
-     * This Method id for two player
+     * This Method is for two player
      */
-    public static void choice1()
-    {
+    public static void chooseHuman() {
         String returnKey;
 
-        int countForX=0;
-        int countForO=0;
-        int[] array1=new int [16];
+        int countForX = 0;
+        int countForO = 0;
+        int[] array = new int[16];
         String firstPlayer;
         String secondPlayer;
-        String[][] matrix1=new String[4][4];
-        int flag=0;
+        String[][] matrix = new String[4][4];
+        int flag = 0;
 
 
-        printBoard( matrix1);
+        printBoard(matrix);
 
-        while(flag==0) {
-            firstPlayer="X";
-            secondPlayer="O";
+        while (flag == 0) {
+            firstPlayer = "X";
+            secondPlayer = "O";
             int firstPlayerCheck;
             int secondPlayerCheck;
 
@@ -363,140 +336,134 @@ public class Main {
             int cellNumber = get.nextInt();
             countForX++;
             System.out.println();
-            printBoardForPlayer(firstPlayer,secondPlayer , cellNumber, matrix1, array1);
-            firstPlayerCheck=check(firstPlayer,matrix1,cellNumber);
-            if(firstPlayerCheck == 1){
+            printBoardForPlayer(firstPlayer, secondPlayer, cellNumber, matrix, array);
+            firstPlayerCheck = check(firstPlayer, matrix, cellNumber);
+            if (firstPlayerCheck == 1) {
                 System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
                 System.out.print("returnKey =");
-                returnKey= get.next();
-                if(Objects.equals(returnKey, "R"))
-                {
-                    choice1();
-                }else{
-                    flag=1;}
+                returnKey = get.next();
+                if (Objects.equals(returnKey, "R")) {
+                    chooseHuman();
+                } else {
+                    flag = 1;
+                }
 
-            }
+            } else {
 
-            else{
-
-                if((countForO+countForX) == 13) {
+                if ((countForO + countForX) == 13) {
                     System.out.println("game became  tie");
                     System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
                     System.out.print("returnKey =");
-                    returnKey= get.next();
-                    if(Objects.equals(returnKey, "R")){
+                    returnKey = get.next();
+                    if (Objects.equals(returnKey, "R")) {
 
-                        choice1();
-                    }
-                    else{
+                        chooseHuman();
+                    } else {
                         flag = 1;
                     }
 
 
-
-                }else{
+                } else {
 
 
                     System.out.println("secondPlayer it is your turn ");
                     System.out.print("please choose a cell =");
-                    int cellNumber2= get.nextInt();
+                    int cellNumber2 = get.nextInt();
                     countForO++;
                     System.out.println();
-                    printBoardForPlayer(secondPlayer, firstPlayer,cellNumber2, matrix1, array1);
-                    secondPlayerCheck = check(secondPlayer,matrix1,cellNumber2);
-                    if(secondPlayerCheck == 1) {
+                    printBoardForPlayer(secondPlayer, firstPlayer, cellNumber2, matrix, array);
+                    secondPlayerCheck = check(secondPlayer, matrix, cellNumber2);
+                    if (secondPlayerCheck == 1) {
                         System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
                         System.out.print("returnKey =");
-                        returnKey= get.next();
-                        if(Objects.equals(returnKey, "R")){
-                            choice1();
+                        returnKey = get.next();
+                        if (Objects.equals(returnKey, "R")) {
+                            chooseHuman();
+                        } else {
+                            flag = 1;
                         }
-                        else {
-                            flag = 1;}
-                    }  }}
+                    }
+                }
+            }
         }
     }
 
 
-
-
-
-
     /**
-     * This Methode is for computer and human option
+     * This Method is for computer and human option
      */
 
-    public static void choice2(){
-        int countForComputer=0;
+    public static void chooseComputer() {
+        int countForComputer = 0;
         String returnKey;
-        String[][] matrix1=new String[4][4];
-        int[] array1=new int [16];
-        int countForPlayer=0;
-        int flag=0;
+        String[][] matrix = new String[4][4];
+        int[] array = new int[16];
+        int countForPlayer = 0;
+        int flag = 0;
         int playerMove;
         int computer1;
         int moveForComputer = 0;
         int playerCheck;
         int computerCheck;
 
-        String computer="O";
-        String player="X";
-        printBoard(matrix1);
-        while(flag==0) {
+        String computer = "O";
+        String player = "X";
+        printBoard(matrix);
+        while (flag == 0) {
 
             System.out.println("it is your turn ");
             System.out.print("please choose a cell =");
-            playerMove= get.nextInt();
+            playerMove = get.nextInt();
             countForPlayer++;
             System.out.println();
-            printBoardForPlayer(player,computer,playerMove,matrix1,array1);
-            playerCheck = check(player,matrix1,playerMove);
-            if(playerCheck == 1){
+            printBoardForPlayer(player, computer, playerMove, matrix, array);
+            playerCheck = check(player, matrix, playerMove);
+            if (playerCheck == 1) {
                 System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
                 System.out.print("returnKey =");
-                returnKey= get.next();
-                if(Objects.equals(returnKey, "R")){
-                    choice2();
-                }else{
-                    flag=1;}
-            }
-            else{
+                returnKey = get.next();
+                if (Objects.equals(returnKey, "R")) {
+                    chooseComputer();
+                } else {
+                    flag = 1;
+                }
+            } else {
 
 
-                if((countForComputer+countForPlayer) == 13){
+                if ((countForComputer + countForPlayer) == 13) {
                     System.out.println("game became  tie");
                     System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
                     System.out.print("returnKey =");
-                    returnKey= get.next();
-                    if(Objects.equals(returnKey, "R")){
-                        choice2();
+                    returnKey = get.next();
+                    if (Objects.equals(returnKey, "R")) {
+                        chooseComputer();
+                    } else {
+                        flag = 1;
                     }
-                    else {
-                        flag = 1;}
 
+
+                } else {
+
+                    computer1 = printForComputer(matrix, moveForComputer);
+                    countForComputer++;
+
+                    computerCheck = check(computer, matrix, computer1);
+                    if (computerCheck == 1) {
+                        System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
+                        System.out.print("returnKey =");
+                        returnKey = get.next();
+                        System.out.println();
+                        if (Objects.equals(returnKey, "R")) {
+                            chooseComputer();
+                        } else {
+                            flag = 1;
+                        }
+
+                    }
 
 
                 }
-                else{
-
-                    computer1= printForComputer(matrix1,moveForComputer);
-                    countForComputer++;
-
-                    computerCheck=check(computer,matrix1,computer1);
-                    if(computerCheck == 1){
-                        System.out.println("If you want to play again press R otherwise press another alphabet key to get back to menu");
-                        System.out.print("returnKey =");
-                        returnKey= get.next();
-                        System.out.println();
-                        if(Objects.equals(returnKey, "R")){
-                            choice2();
-                        } else{
-                            flag=1;}
-
-                    }
-
-
-                }}
+            }
         }
     }
 }
